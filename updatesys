@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+# This script was made because im very lazy and hate having to type out all the update stuff like
+# sudo apt update && sudo apt upgrade and also flatpak update so I made this to do it. 
+# If you want to use it on your system be sure to have Ruby on your system as well as install the rainbow gem 
+# and put the script in usrlocalbin to use the script globally on your system.
+#
+# You might be asking yourself couldnt you have just used an alias in your .bashrc and the answer is yes
+# but thats way less fun lol.
+
+  
+ 
+require 'rainbow/refinement'
+using Rainbow
+
+puts "Would you like to update both [sys] or [flatpak] or [both]".green
+
+user_update_pref = gets.chomp
+
+if user_update_pref == "sys"
+	puts "Updating system programs only".green
+  system("sudo apt update && sudo apt upgrade -y")
+elsif user_update_pref == "flatpak"
+	puts "Updating flatpak programs only".green
+  system("flatpak update")
+elsif user_update_pref == "both"
+	puts "Updating both system and flatpak programs".green
+  system("sudo apt update && sudo apt upgrade -y")
+  sleep(3)
+  system("flatpak update")
+else
+  puts "You must have made an error, run the script again and follow the instructions".red
+  puts "The options are [sys] [flatpak] or [both]".red
+end
