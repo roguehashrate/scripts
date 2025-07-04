@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if pgrep pipewire > /dev/null 2>&1; then
+  echo "PipeWire audio service is running."
+else
+  echo "PipeWire audio service is NOT running."
+fi
+
