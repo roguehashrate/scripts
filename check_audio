@@ -1,5 +1,5 @@
 #!/bin/sh
-
+# Checks to see if pipewire is running
 if pgrep pipewire > /dev/null 2>&1; then
   echo "PipeWire audio service is running."
 else
