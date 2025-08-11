@@ -1,0 +1,43 @@
+#!/bin/bash
+
+CONFIG_DIR="$HOME/Downloads/mullvad-wireguard"
+ACTIVE_FILE="$HOME/.active_vpn"
+
+if [ ! -d "$CONFIG_DIR" ]; then
+    echo "Config directory not found: $CONFIG_DIR"
+    exit 1
+fi
+
+case "$1" in
+    random)
+        CONF=$(find "$CONFIG_DIR" -type f -name "*.conf" | shuf -n 1)
+        ;;
+    us)
+        CONF=$(find "$CONFIG_DIR" -type f -name "*us*.conf" | shuf -n 1)
+        ;;
+    *)
+        echo "Usage: vpnup {random|us}"
+        exit 1
+        ;;
+esac
+
+if [ -z "$CONF" ]; then
+    echo "No matching config found."
+    exit 1
+fi
+
+# Stop any existing connection
+if [ -f "$ACTIVE_FILE" ]; then
+    doas wg-quick down "$(cat "$ACTIVE_FILE")" >/dev/null 2>&1
+fi
+
+# Start new VPN
+BASENAME=$(basename "$CONF" .conf)
+doas wg-quick up "$CONF"
+if [ $? -eq 0 ]; then
+    echo "$CONF" > "$ACTIVE_FILE"
+    echo "VPN up → $BASENAME"
+else
+    echo "Failed to start VPN."
+fi
+

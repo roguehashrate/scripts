@@ -1,0 +1,19 @@
+#!/bin/bash
+
+ACTIVE_FILE="$HOME/.active_vpn"
+
+if [ ! -f "$ACTIVE_FILE" ]; then
+    echo "No VPN is currently active."
+    exit 1
+fi
+
+CONF=$(cat "$ACTIVE_FILE")
+
+doas wg-quick down "$CONF"
+if [ $? -eq 0 ]; then
+    rm -f "$ACTIVE_FILE"
+    echo "VPN down."
+else
+    echo "Failed to stop VPN."
+fi
+
