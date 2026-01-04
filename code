@@ -1,3 +1,0 @@
-#!/bin/sh
-nvim "$(find ~/code/ -mindepth 1 -maxdepth 1 -type d | fzf --height 20% --layout=reverse --border)"
-

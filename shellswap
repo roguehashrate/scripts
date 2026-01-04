@@ -1,6 +1,21 @@
 #!/bin/sh
 
-selected_shell=$(cat /etc/shells | fzf --height 20% --layout=reverse --border) || exit
+# Get current shell name
+current_shell=$(basename "$SHELL")
 
-chsh -s $selected_shell
+# Get unique shell names from /etc/shells
+shells_list=$(awk -F/ '{print $NF}' /etc/shells | sort -u)
 
+# Build menu: put current shell at top, others after
+menu=$(printf "%s\n" "$current_shell" $(printf "%s\n" $shells_list | grep -v "^$current_shell$"))
+
+# Show Wofi menu and get choice
+choice=$(printf "%s\n" "$menu" | wofi --dmenu --prompt "Select shell:") || exit
+
+# Map choice back to full path
+full_path=$(grep "/$choice\$" /etc/shells | head -n1)
+
+# Change shell
+chsh -s "$full_path"
+
+echo "Shell changed to $choice"
