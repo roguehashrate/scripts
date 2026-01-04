@@ -1,0 +1,6 @@
+#!/bin/sh
+
+selected_shell=$(cat /etc/shells | fzf) || exit
+
+chsh -s $selected_shell
+
