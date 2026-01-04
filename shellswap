@@ -1,6 +1,6 @@
 #!/bin/sh
 
-selected_shell=$(cat /etc/shells | fzf) || exit
+selected_shell=$(cat /etc/shells | fzf --height 20% --layout=reverse --border) || exit
 
 chsh -s $selected_shell
 
