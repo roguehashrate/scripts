@@ -16,7 +16,7 @@ browse() {
 
         case "$choice" in
             nvim)
-                nvim "$selection"
+                ptyxis -x "nvim '$selection'" &
                 ;;
             vscode)
                 # Detect top-level project folder under ~/code
